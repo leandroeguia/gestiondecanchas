@@ -5,6 +5,5 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-
-	w.Write([]byte("Respuesta de la API de Reservas"))
+	w.Write([]byte("Hola desde Vercel"))
 }
