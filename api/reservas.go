@@ -5,5 +5,5 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hola desde Vercel"))
+	w.Write([]byte("Conexión con reservas exitosa"))
 }
