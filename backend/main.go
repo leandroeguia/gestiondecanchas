@@ -1,25 +1,37 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
+	"log"
+	"os"
+
+	"gestion-canchas/backend/internal/repository"
+
+	"github.com/joho/godotenv" // Importas la librería
 )
 
 func main() {
-	// Definimos el endpoint que Nuxt buscará vía Proxy
-	http.HandleFunc("/api/hola", func(w http.ResponseWriter, r *http.Request) {
-		// Importante para que el front entienda que es JSON
-		w.Header().Set("Content-Type", "application/json")
+	// Carga las variables desde el archivo .env
+	// Si estás parado en la raíz, buscará el archivo .env ahí mismo
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Aviso: No se pudo cargar el archivo .env, se usarán las variables del sistema")
+	}
 
-		data := map[string]string{
-			"mensaje": "¡Conexión exitosa! Go y Nuxt están hablando.",
-			"status":  "OK",
-		}
+	// Ahora sí, Go podrá leerla sin problemas
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		log.Fatal("La variable de entorno DATABASE_URL no está configurada")
+	}
 
-		json.NewEncoder(w).Encode(data)
-	})
+	conn, err := repository.ConnectDB(connStr)
+	if err != nil {
+		log.Fatalf("Error al conectar a la base de datos: %v", err)
+	}
+	defer conn.Close()
 
-	fmt.Println("🚀 Servidor de Go corriendo en http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	if err := conn.Ping(); err != nil {
+		log.Fatalf("No se pudo responder al Ping de Supabase: %v", err)
+	}
+
+	log.Println("¡Conexión exitosa a Supabase desde el backend!")
 }
