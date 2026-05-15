@@ -5,7 +5,8 @@ import (
 	"net/http"
 )
 
-// Esta es la única función que Vercel va a ejecutar
+// Esta función DEBE llamarse Handler y ser pública (Mayúscula)
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "¡Backend de canchas funcionando en Vercel!")
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprintf(w, "¡El backend de Gestión de Canchas está vivo!")
 }
