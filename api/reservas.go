@@ -1,10 +1,10 @@
-package api
+package handler
 
 import (
-	"fmt"
 	"net/http"
 )
 
-func ReservaHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Endpoint de reservas funcionando correctamente")
+func Handler(w http.ResponseWriter, r *http.Request) {
+
+	w.Write([]byte("Respuesta de la API de Reservas"))
 }
